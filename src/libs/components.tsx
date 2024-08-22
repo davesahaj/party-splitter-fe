@@ -1,6 +1,6 @@
-import { Button, ButtonProps, Text, TextProps } from '@mantine/core'
+import { Button, ButtonProps, Card, CardProps, Text, TextProps } from '@mantine/core'
 import { Link, Redirect, Route, Router, Switch } from 'wouter'
 
 export { Link, Redirect, Route, Router, Switch }
-export { Button as NativeButton, Text as NativeText }
-export type { ButtonProps as NativeButtonProps, TextProps as NativeTextProps }
+export { Button as NativeButton, Card as NativeCard, Text as NativeText }
+export type { ButtonProps as NativeButtonProps, CardProps as NativeCardProps, TextProps as NativeTextProps }

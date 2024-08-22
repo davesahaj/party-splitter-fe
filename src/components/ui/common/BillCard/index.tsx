@@ -11,7 +11,7 @@ export const BillCard = (props: BillCardType) => {
       <div className="flex justify-between">
         <Text>{formatRelative(props.date, new Date())}</Text>
         <Text c="violet.9" fw={500} classNames={{ root: 'text-xl' }}>
-          {props.cost}
+          {`₹${props.cost}`}
         </Text>
       </div>
       <Text c="gray.7">{props.people}</Text>

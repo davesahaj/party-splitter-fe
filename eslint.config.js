@@ -59,7 +59,7 @@ export default [
       'checkFile/filename-naming-convention': [
         'error',
         {
-          './src/**/*.{js,ts,jsx,tsx}': 'KEBAB_CASE',
+          './src/**/*.{js,ts,jsx,tsx}': 'CAMEL_CASE',
         },
       ],
     },
@@ -76,5 +76,5 @@ export default [
   ...tseslint.configs.recommended,
 
   pluginReactConfig,
-  pluginJsxRuntime
+  pluginJsxRuntime,
 ]

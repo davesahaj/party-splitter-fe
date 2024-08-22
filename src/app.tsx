@@ -1,9 +1,11 @@
-import { RouterProvider } from '@/providers'
+import { RouterProvider, ThemeProvider } from '@/providers'
 
 function App() {
   return (
     <>
-      <RouterProvider />
+      <ThemeProvider>
+        <RouterProvider />
+      </ThemeProvider>
     </>
   )
 }

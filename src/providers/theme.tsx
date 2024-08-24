@@ -3,6 +3,8 @@ import { createTheme, MantineProvider } from '@mantine/core'
 import { MainLayout } from '@/components/layout'
 
 import '@mantine/core/styles.css'
+import '@mantine/dates/styles.css'
+import '@mantine/dropzone/styles.css'
 
 type Props = {
   children: JSX.Element

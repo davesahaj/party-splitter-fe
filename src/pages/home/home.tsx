@@ -11,8 +11,8 @@ export const Home = () => {
         <BillCard venue="Meghnas" cost={8400} date={new Date()} people={4} />
       </div>
 
-      <Link to={ROUTES.NEW_EXPENSE} className="w-full">
-        <Button fullWidth size="xl">
+      <Link to={ROUTES.NEW_EXPENSE} className="w-full no-underline">
+        <Button fullWidth size="lg">
           Add Expense
         </Button>
       </Link>

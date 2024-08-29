@@ -13,7 +13,7 @@ export const AddExpense = () => {
   const form = useForm({
     mode: 'uncontrolled',
 
-    initialValues: { location: '', date: '', participants: ['test'] },
+    initialValues: { location: '', date: '', participants: ['Sahaj'] },
     validate: {
       location: (value) => (!value.length ? 'Location can not be empty' : null),
       date: (value: Date | string) => (value instanceof Date ? null : 'Date can not be empty'),

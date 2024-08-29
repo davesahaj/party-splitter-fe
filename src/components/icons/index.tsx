@@ -1,3 +1,3 @@
-import { IconPlus } from '@tabler/icons-react'
+import { IconEdit, IconPlus } from '@tabler/icons-react'
 
-export { IconPlus }
+export { IconEdit, IconPlus }

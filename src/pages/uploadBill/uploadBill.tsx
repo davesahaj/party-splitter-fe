@@ -1,7 +1,7 @@
 import { IconLicense, IconUpload } from '@tabler/icons-react'
 
 import { Button, Text } from '@/components/ui/core'
-import { IMAGE_MIME_TYPE, NativeDropzone, NativeFlex, NativeGroup } from '@/libs'
+import { IMAGE_MIME_TYPE, NativeDropzone, NativeFlex } from '@/libs'
 
 export const UploadBill = () => {
   return (

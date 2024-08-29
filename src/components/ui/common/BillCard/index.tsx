@@ -5,7 +5,7 @@ import { BillCardType } from '@/types'
 export const BillCard = (props: BillCardType) => {
   return (
     <NativeCard component="a" href="#" shadow="sm" padding="lg" radius="md" withBorder classNames={{ root: 'gap-y-2' }}>
-      <Text c="violet" fw={900} classNames={{ root: 'text-2xl' }}>
+      <Text c="violet" fw={900} classNames={{ root: 'text-2xl xl:w-72' }}>
         {props.venue}
       </Text>
       <div className="flex justify-between">

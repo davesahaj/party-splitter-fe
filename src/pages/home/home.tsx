@@ -8,7 +8,7 @@ export const Home = () => {
     <div className="flex flex-col justify-between h-full">
       <div className="flex flex-col xl:flex-row gap-y-4 xl:gap-4">
         <BillCard venue="Meghnas" cost={8400} date={new Date('2024-08-17T03:24:00')} people={4} />
-        <BillCard venue="Meghnas" cost={8400} date={new Date()} people={4} />
+        <BillCard venue="Burma Burma" cost={4250} date={new Date()} people={2} />
       </div>
 
       <Link to={ROUTES.NEW_EXPENSE} className="w-full no-underline">

@@ -65,14 +65,12 @@ export const AddExpense = () => {
           <TextInput
             size="md"
             radius="md"
-            withAsterisk
             label="Location"
             placeholder="Lazy Suzy"
             key={form.key('location')}
             {...form.getInputProps('location')}
           />
           <DateInput
-            withAsterisk
             maxDate={new Date()}
             size="md"
             radius="md"

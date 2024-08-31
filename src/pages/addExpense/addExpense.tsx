@@ -67,6 +67,7 @@ export const AddExpense = () => {
           />
           <DateInput
             withAsterisk
+            maxDate={new Date()}
             size="md"
             radius="md"
             label="Date"
@@ -93,7 +94,7 @@ export const AddExpense = () => {
         </form>
       </div>
       <Button fullWidth size="lg" onClick={handleSubmit}>
-        Next
+        Next (1/5)
       </Button>
     </div>
   )

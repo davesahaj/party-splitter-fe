@@ -2,7 +2,7 @@ import { IconLicense, IconUpload } from '@tabler/icons-react'
 
 import { Button, Text } from '@/components/ui/core'
 import { ROUTES } from '@/constants'
-import { IMAGE_MIME_TYPE, Link, NativeDropzone, NativeFlex, useLocation } from '@/libs'
+import { IMAGE_MIME_TYPE, NativeDropzone, NativeFlex, useLocation } from '@/libs'
 
 export const UploadBill = () => {
   const [, setLocation] = useLocation()
@@ -30,11 +30,10 @@ export const UploadBill = () => {
         </NativeDropzone>
         <IconLicense size="180px" stroke={0.15} className="mx-auto" />
       </div>
-      <Link to={ROUTES.NEW_EXPENSE} className="w-full no-underline">
-        <Button onClick={handleSubmit} classNames={{ root: 'w-full xl:w-auto xl:float-right' }} size="lg">
-          Next
-        </Button>
-      </Link>
+
+      <Button onClick={handleSubmit} classNames={{ root: 'w-full xl:w-auto xl:float-right' }} size="lg">
+        Next (2/5)
+      </Button>
     </div>
   )
 }

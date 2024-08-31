@@ -6,6 +6,12 @@ import { Button, DateInput, IconButton, Pill, Text, TextInput } from '@/componen
 import { ROUTES } from '@/constants'
 import { dateFormat, NativeGroup, NativeScrollArea, useLocation } from '@/libs'
 
+const initialValues: {
+  location: string
+  date: string
+  participants: string[]
+} = { location: '', date: '', participants: [] }
+
 export const AddExpense = () => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [, setLocation] = useLocation()
@@ -13,7 +19,7 @@ export const AddExpense = () => {
   const form = useForm({
     mode: 'uncontrolled',
 
-    initialValues: { location: '', date: '', participants: ['Sahaj'] },
+    initialValues,
     validate: {
       location: (value) => (!value.length ? 'Location can not be empty' : null),
       date: (value: Date | string) => (value instanceof Date ? null : 'Date can not be empty'),
@@ -51,7 +57,7 @@ export const AddExpense = () => {
   return (
     <div className="flex flex-col justify-between h-full space-y-6">
       <div className="flex flex-col space-y-10 ">
-        <Text fw={500} c="dark.4" classNames={{ root: 'text-xl text-center' }}>
+        <Text fw={500} c="dark.4" classNames={{ root: 'text-xl text-center font-urbanist' }}>
           Add new Expense
         </Text>
 

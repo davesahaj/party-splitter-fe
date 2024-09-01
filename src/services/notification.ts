@@ -8,6 +8,7 @@ import {
 } from '@mantine/notifications'
 
 const config = {
+  withBorder: true,
   withCloseButton: true,
   autoClose: 5000,
   // classNames:{}
@@ -18,11 +19,6 @@ const notification = {
     showNotification({
       ...config,
       ...otherProps,
-      classNames: {
-        body: '',
-        description: '',
-        root: '',
-      },
     })
   },
   update: function ({ ...otherProps }: NotificationData) {

@@ -1,3 +1,8 @@
+/*----------  single source to import and use all third party libraries components  ----------*/
+
+/*----------  Alias all components with 'Native' prefix for differentiation between custom and library components  ----------*/
+
+/*----------  Imports  ----------*/
 import {
   ActionIcon as NativeActionIcon,
   ActionIconProps as NativeActionIconProps,
@@ -26,8 +31,13 @@ import {
 } from '@mantine/core'
 import { DateInput as NativeDateInput, DateInputProps as NativeDateInputProps } from '@mantine/dates'
 import { Dropzone as NativeDropzone, DropzoneProps as NativeDropzoneProps, IMAGE_MIME_TYPE } from '@mantine/dropzone'
+import {
+  Notifications as NativeNotifications,
+  NotificationsProps as NativeNotificationProps,
+} from '@mantine/notifications'
 import { Link, Redirect, Route, Router, Switch } from 'wouter'
 
+/*----------  Exports  ----------*/
 export {
   IMAGE_MIME_TYPE,
   Link,
@@ -40,6 +50,7 @@ export {
   NativeFlex,
   NativeGroup,
   NativeMultiSelect,
+  NativeNotifications,
   NativeNumberInput,
   NativePill,
   NativeScrollArea,
@@ -61,6 +72,7 @@ export type {
   NativeFlexProps,
   NativeGroupProps,
   NativeMultiSelectProps,
+  NativeNotificationProps,
   NativeNumberInputProps,
   NativePillProps,
   NativeScrollAreaProps,

@@ -16,7 +16,12 @@ export const storageWriter = (type: storageType, data: any) => {
       forEach(data, (value: any, key: any) => {
         if (key) Cookies.set(key, normalizeData(value))
       })
+      break
     }
+    case 'localStorage':
+      forEach(data, (value: any, key: any) => {
+        if (key) localStorage.setItem(key, normalizeData(value))
+      })
   }
 }
 
@@ -29,6 +34,17 @@ export const storageReader = (type: storageType, key: string) => {
         retrievedData = JSON.parse(Cookies.get(key) || '')
       } catch (error) {
         retrievedData = Cookies.get(key) || ''
+      }
+
+      return retrievedData
+    }
+    case 'localStorage': {
+      let retrievedData = null
+
+      try {
+        retrievedData = JSON.parse(localStorage.getItem(key) || '')
+      } catch (error) {
+        retrievedData = localStorage.getItem(key) || ''
       }
 
       return retrievedData

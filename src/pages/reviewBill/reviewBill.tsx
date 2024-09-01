@@ -1,37 +1,53 @@
-import { useCallback } from 'react'
-import { useForm } from '@mantine/form'
+import { useCallback, useEffect, useState } from 'react';
+import { useForm } from '@mantine/form';
 
-import { Button, NumberInput, Text, TextInput } from '@/components/ui/core'
-import { ROUTES } from '@/constants'
-import { NativeFieldset, NativeFlex, NativeGroup, NativeScrollArea, randomId, useLocation } from '@/libs'
+import { Button, NumberInput, Text, TextInput } from '@/components/ui/core';
+import { ROUTES } from '@/constants';
+import { NativeFieldset, NativeFlex, NativeGroup, NativeScrollArea, randomId, useLocation } from '@/libs';
 
 export const ReviewBill = () => {
-  const [, setLocation] = useLocation()
+  const [, setLocation] = useLocation();
+  const [data, setData] = useState<any>(null);
+
+
+  useEffect(() => {
+    const storedData = window.sessionStorage.getItem('data');
+    if (storedData) {
+      setData(JSON.parse(storedData));
+      window.sessionStorage.removeItem('data');
+    }
+  }, []);
 
   const form = useForm({
     mode: 'uncontrolled',
-
     initialValues: {
-      items: [{ name: 'Ravioli', price: 10, total: 10, qty: 1, key: randomId() }],
+      items: [] 
     },
+  });
 
-    validate: {
-      items: {
-        name: (value) => (value.length < 2 ? 'Name should have at least 2 letters' : null),
-        price: (value) => (value < 18 ? 'User must be 18 or older' : null),
-        qty: (value) => (value < 18 ? 'User must be 18 or older' : null),
-        total: (value) => (value < 18 ? 'User must be 18 or older' : null),
-      },
-    },
-  })
+  
+  useEffect(() => {
+    if (data && data.gemini_analysis && data.gemini_analysis.line_items) {
+      const items = data.gemini_analysis.line_items.map((item: { item_name: any; rate: any; amount: any; quantity: any; }) => ({
+        name: item.item_name,
+        price: item.rate,
+        total: item.amount,
+        qty: item.quantity,
+        key: randomId() 
+      }));
+      form.setValues({ items });
+    }
+  }, [data, form]);
 
   const handleSubmit = useCallback(() => {
-    if (!form.validate().hasErrors) setLocation(ROUTES.ADD_PARTICIPANTS)
-  }, [form])
+    if (!form.validate().hasErrors) {
+      setLocation(ROUTES.ADD_PARTICIPANTS);
+    }
+  }, [form, setLocation]);
 
   return (
     <div className="flex flex-col justify-between h-full space-y-6">
-      <div className="flex flex-col space-y-10 ">
+      <div className="flex flex-col space-y-10">
         <Text fw={500} c="dark.4" classNames={{ root: 'text-xl text-center font-urbanist' }}>
           Review Bill details
         </Text>
@@ -95,22 +111,27 @@ export const ReviewBill = () => {
       </div>
 
       <NativeGroup>
-        <NativeFlex w="100%" justify="space-between">
-          <Text fz="xl">Discount:</Text>
-          <Text fz="xl">{10}</Text>
-        </NativeFlex>
-        <NativeFlex w="100%" justify="space-between">
-          <Text fz="xl">Taxes:</Text>
-          <Text fz="xl">{10}</Text>
-        </NativeFlex>
-        <NativeFlex w="100%" justify="space-between">
-          <Text fz="xl">Total:</Text>
-          <Text fz="xl">{10}</Text>
-        </NativeFlex>
-        <Button fullWidth size="lg" onClick={handleSubmit}>
-          Next (3/5)
-        </Button>
-      </NativeGroup>
+  <NativeFlex w="100%" justify="space-between">
+    <Text fz="xl">Discount:</Text>
+    <Text fz="xl">{data?.gemini_analysis?.total_discounts ?? 0}</Text>
+  </NativeFlex>
+  <NativeFlex w="100%" justify="space-between">
+    <Text fz="xl">Taxes:</Text>
+    <Text fz="xl">{data?.gemini_analysis?.total_taxes ?? 0}</Text>
+  </NativeFlex>
+  <NativeFlex w="100%" justify="space-between">
+    <Text fz="xl">Total:</Text>
+    <Text fz="xl">
+      {data?.gemini_analysis?.line_items.reduce(
+        (acc: any, item: { amount: any; }) => acc + item.amount,
+        0
+      ) + (data?.gemini_analysis?.total_discounts ?? 0) + (data?.gemini_analysis?.total_taxes ?? 0)}
+    </Text>
+  </NativeFlex>
+  <Button fullWidth size="lg" onClick={handleSubmit}>
+    Next (3/5)
+  </Button>
+</NativeGroup>
     </div>
-  )
-}
+  );
+};

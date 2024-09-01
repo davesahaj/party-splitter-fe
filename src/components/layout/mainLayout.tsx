@@ -1,6 +1,6 @@
 import { Header } from '@/components/ui/common'
 
-type Props = { children: JSX.Element }
+type Props = { children: React.ReactNode }
 
 export const MainLayout = (props: Props) => {
   return (

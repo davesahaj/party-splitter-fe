@@ -4,7 +4,7 @@ import forEach from 'lodash/forEach'
 
 import { Cookies } from '@/libs'
 
-type storageType = 'cookie' | 'localStorage'
+type storageType = 'cookie' | 'localStorage' | 'session'
 
 export const storageWriter = (type: storageType, data: any) => {
   function normalizeData(val: any) {
@@ -22,6 +22,13 @@ export const storageWriter = (type: storageType, data: any) => {
       forEach(data, (value: any, key: any) => {
         if (key) localStorage.setItem(key, normalizeData(value))
       })
+      break
+
+    case 'session':
+      forEach(data, (value: any, key: any) => {
+        if (key) window.sessionStorage.setItem(key, normalizeData(value))
+      })
+      break
   }
 }
 

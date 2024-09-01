@@ -4,7 +4,7 @@ import { useForm } from '@mantine/form'
 import { IconPlus } from '@/components/icons'
 import { Button, DateInput, IconButton, Pill, Text, TextInput } from '@/components/ui/core'
 import { ROUTES } from '@/constants'
-import { dateFormat, NativeGroup, NativeScrollArea, useLocation } from '@/libs'
+import { dateFormat, getHotkeyHandler, NativeGroup, NativeScrollArea, useLocation } from '@/libs'
 
 const initialValues: {
   location: string
@@ -56,7 +56,7 @@ export const AddExpense = () => {
 
   return (
     <div className="flex flex-col justify-between h-full space-y-6">
-      <div className="flex flex-col space-y-10 ">
+      <div className="flex flex-col space-y-10">
         <Text fw={500} c="dark.4" classNames={{ root: 'text-xl text-center font-urbanist' }}>
           Add new Expense
         </Text>
@@ -80,7 +80,15 @@ export const AddExpense = () => {
             {...form.getInputProps('date')}
           />
           <NativeGroup justify="space-between" align="flex-end" wrap="nowrap" gap="sm">
-            <TextInput ref={inputRef} size="md" radius="md" label="Participants" placeholder="Saksham" />
+            <TextInput
+              ref={inputRef}
+              size="md"
+              radius="md"
+              label="Participants"
+              placeholder="Saksham"
+              className="lg:w-full"
+              onKeyDown={getHotkeyHandler([['Enter', addParticipant]])}
+            />
             <IconButton size="xl" mb={2} radius="xl" variant="light">
               <IconPlus onClick={addParticipant} />
             </IconButton>
@@ -97,9 +105,11 @@ export const AddExpense = () => {
           </NativeScrollArea.Autosize>
         </form>
       </div>
-      <Button fullWidth size="lg" onClick={handleSubmit}>
-        Next (1/5)
-      </Button>
+      <div>
+        <Button classNames={{ root: 'w-full lg:w-auto lg:float-right' }} size="lg" onClick={handleSubmit}>
+          Next (1/5)
+        </Button>
+      </div>
     </div>
   )
 }

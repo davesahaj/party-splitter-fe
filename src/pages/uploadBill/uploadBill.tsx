@@ -4,7 +4,8 @@ import { Image } from '@mantine/core'
 import { FileWithPath } from '@mantine/dropzone'
 import { IconLicense, IconUpload } from '@tabler/icons-react'
 
-import { Button, Text } from '@/components/ui/core'
+import { PageLayout } from '@/components/layout'
+import { Text } from '@/components/ui/core'
 import { ROUTES } from '@/constants'
 import { useStore } from '@/hooks'
 import { IMAGE_MIME_TYPE, NativeDropzone, NativeFlex, useLocation } from '@/libs'
@@ -134,7 +135,7 @@ export const UploadBill = () => {
   }
 
   return (
-    <div className="flex flex-col justify-between h-full space-y-6">
+    <PageLayout buttonProps={{ onClick: handleSubmit, text: '  Next (2/5)', loading: isLoading }}>
       <div className="flex flex-col space-y-10 ">
         <Text fw={500} c="dark.4" classNames={{ root: 'text-xl text-center font-urbanist' }}>
           Add bill details
@@ -143,7 +144,7 @@ export const UploadBill = () => {
           <NativeFlex gap="md" h={150} justify="center" align="center" direction="column" wrap="nowrap">
             <IconUpload />
             <Text fw={500} c="dark.4" classNames={{ root: 'text-xl' }}>
-              Upload Bill
+              {isLoading ? ' Uploading Bill' : ' Upload Bill'}
             </Text>
           </NativeFlex>
         </NativeDropzone>
@@ -154,19 +155,9 @@ export const UploadBill = () => {
             onLoad={() => URL.revokeObjectURL(URL.createObjectURL(file))}
           />
         ) : (
-          <IconLicense size="180px" stroke={0.15} className="mx-auto" />
+          <IconLicense size="140px" stroke={0.15} className="mx-auto" />
         )}
       </div>
-      <div>
-        <Button
-          loading={isLoading}
-          classNames={{ root: 'w-full lg:w-auto lg:float-right' }}
-          size="lg"
-          onClick={handleSubmit}
-        >
-          Next (2/5)
-        </Button>
-      </div>
-    </div>
+    </PageLayout>
   )
 }

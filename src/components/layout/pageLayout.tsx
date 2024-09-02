@@ -1,6 +1,6 @@
 import { BottomBar } from '@/components/ui/common'
 
-type Props = { children: React.ReactNode; buttonProps: { onClick: () => void; text: string } }
+type Props = { children: React.ReactNode; buttonProps: { onClick: () => void; text: string; loading?: boolean } }
 
 export const PageLayout = ({ children, buttonProps }: Props) => {
   return (

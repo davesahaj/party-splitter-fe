@@ -5,9 +5,10 @@ import { MainLayout } from '@/components/layout'
 import '@mantine/core/styles.css'
 import '@mantine/dates/styles.css'
 import '@mantine/dropzone/styles.css'
+import '@mantine/notifications/styles.css'
 
 type Props = {
-  children: JSX.Element
+  children: React.ReactNode
 }
 const theme = createTheme({
   primaryColor: 'violet',

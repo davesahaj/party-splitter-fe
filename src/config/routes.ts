@@ -3,7 +3,7 @@ import { AddExpense, AddParticipants, Home, PageNotFound, Report, ReviewBill, Up
 
 export const publicRoutes: {
   path: string
-  component: () => JSX.Element
+  component: () => React.ReactNode
 }[] = [
   {
     path: ROUTES.HOME,

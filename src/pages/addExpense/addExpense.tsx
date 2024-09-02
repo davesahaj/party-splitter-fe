@@ -4,7 +4,8 @@ import { useForm } from '@mantine/form'
 import { IconPlus } from '@/components/icons'
 import { Button, DateInput, IconButton, Pill, Text, TextInput } from '@/components/ui/core'
 import { ROUTES } from '@/constants'
-import { dateFormat, NativeGroup, NativeScrollArea, useLocation } from '@/libs'
+import { useStore } from '@/hooks'
+import { dateFormat, getHotkeyHandler, NativeGroup, NativeScrollArea, useLocation } from '@/libs'
 
 const initialValues: {
   location: string
@@ -16,6 +17,9 @@ export const AddExpense = () => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [, setLocation] = useLocation()
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateForm = useStore((state: any) => state.updateForm)
+
   const form = useForm({
     mode: 'uncontrolled',
 
@@ -26,9 +30,17 @@ export const AddExpense = () => {
     },
   })
 
-  const handleSubmit = useCallback(() => {
-    if (!form.validate().hasErrors) setLocation(ROUTES.UPLOAD_BILL)
-  }, [form])
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+  const handleSubmit = () => {
+    if (!form.validate().hasErrors) {
+      const { date, location, participants } = form.getValues()
+
+      updateForm({ date, venue: location, participants })
+
+      setLocation(ROUTES.UPLOAD_BILL)
+    }
+  }
 
   const addParticipant = useCallback(() => {
     const val = inputRef?.current?.value
@@ -56,23 +68,21 @@ export const AddExpense = () => {
 
   return (
     <div className="flex flex-col justify-between h-full space-y-6">
-      <div className="flex flex-col space-y-10 ">
+      <div className="flex flex-col space-y-10">
         <Text fw={500} c="dark.4" classNames={{ root: 'text-xl text-center font-urbanist' }}>
           Add new Expense
         </Text>
 
-        <form className="space-y-6" onSubmit={form.onSubmit((values) => console.log(values))}>
+        <form className="space-y-6">
           <TextInput
             size="md"
             radius="md"
-            withAsterisk
             label="Location"
             placeholder="Lazy Suzy"
             key={form.key('location')}
             {...form.getInputProps('location')}
           />
           <DateInput
-            withAsterisk
             maxDate={new Date()}
             size="md"
             radius="md"
@@ -82,7 +92,15 @@ export const AddExpense = () => {
             {...form.getInputProps('date')}
           />
           <NativeGroup justify="space-between" align="flex-end" wrap="nowrap" gap="sm">
-            <TextInput ref={inputRef} size="md" radius="md" label="Participants" placeholder="Saksham" />
+            <TextInput
+              ref={inputRef}
+              size="md"
+              radius="md"
+              label="Participants"
+              placeholder="Saksham"
+              className="lg:w-full"
+              onKeyDown={getHotkeyHandler([['Enter', addParticipant]])}
+            />
             <IconButton size="xl" mb={2} radius="xl" variant="light">
               <IconPlus onClick={addParticipant} />
             </IconButton>
@@ -99,9 +117,11 @@ export const AddExpense = () => {
           </NativeScrollArea.Autosize>
         </form>
       </div>
-      <Button fullWidth size="lg" onClick={handleSubmit}>
-        Next (1/5)
-      </Button>
+      <div>
+        <Button classNames={{ root: 'w-full lg:w-auto lg:float-right' }} size="lg" onClick={handleSubmit}>
+          Next (1/5)
+        </Button>
+      </div>
     </div>
   )
 }

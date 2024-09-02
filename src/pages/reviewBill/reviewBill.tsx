@@ -1,49 +1,41 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useForm } from '@mantine/form';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useCallback } from 'react'
+import { useForm } from '@mantine/form'
 
-import { Button, NumberInput, Text, TextInput } from '@/components/ui/core';
-import { ROUTES } from '@/constants';
-import { NativeFieldset, NativeFlex, NativeGroup, NativeScrollArea, randomId, useLocation } from '@/libs';
+import { Button, NumberInput, Text, TextInput } from '@/components/ui/core'
+import { ROUTES } from '@/constants'
+import { useStore } from '@/hooks'
+import { NativeFieldset, NativeFlex, NativeGroup, NativeScrollArea, useLocation } from '@/libs'
+import { BillItem } from '@/types'
 
 export const ReviewBill = () => {
-  const [, setLocation] = useLocation();
-  const [data, setData] = useState<any>(null);
+  const state = useStore((state: any) => state)
+  const updateForm = useStore((state: any) => state.updateForm)
 
-
-  useEffect(() => {
-    const storedData = window.sessionStorage.getItem('data');
-    if (storedData) {
-      setData(JSON.parse(storedData));
-      window.sessionStorage.removeItem('data');
-    }
-  }, []);
+  const [, setLocation] = useLocation()
 
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
-      items: [] 
+      items: state.items,
+      taxes: state.taxes,
+      total: state.total,
+      discount: state.discount,
     },
-  });
-
-  
-  useEffect(() => {
-    if (data && data.gemini_analysis && data.gemini_analysis.line_items) {
-      const items = data.gemini_analysis.line_items.map((item: { item_name: any; rate: any; amount: any; quantity: any; }) => ({
-        name: item.item_name,
-        price: item.rate,
-        total: item.amount,
-        qty: item.quantity,
-        key: randomId() 
-      }));
-      form.setValues({ items });
-    }
-  }, [data, form]);
+  })
 
   const handleSubmit = useCallback(() => {
+    form.setFieldValue('total', getTotal())
+
     if (!form.validate().hasErrors) {
-      setLocation(ROUTES.ADD_PARTICIPANTS);
+      updateForm(form.getValues())
+      setLocation(ROUTES.ADD_PARTICIPANTS)
     }
-  }, [form, setLocation]);
+  }, [form, setLocation])
+
+  const getTotal = () =>
+    form.getValues().taxes +
+    form.getValues().items.reduce((acc: number, { price, qty }: BillItem) => acc + price * qty, 0)
 
   return (
     <div className="flex flex-col justify-between h-full space-y-6">
@@ -53,9 +45,9 @@ export const ReviewBill = () => {
         </Text>
 
         <NativeScrollArea.Autosize offsetScrollbars type="auto">
-          <form className="space-y-6" onSubmit={form.onSubmit((values) => console.log(values))}>
-            {form.getValues().items.map(({ key }, index) => (
-              <NativeFieldset key={key} legend={`Item ${index + 1}`} radius="md" classNames={{ root: 'bg-slate-50' }}>
+          <form className="space-y-6">
+            {form.getValues().items.map(({ name, price, qty }: BillItem, index: number) => (
+              <NativeFieldset key={name} legend={`Item ${index + 1}`} radius="md" classNames={{ root: 'bg-slate-50' }}>
                 <NativeFlex justify="space-between" mt="md">
                   <TextInput
                     size="md"
@@ -98,10 +90,10 @@ export const ReviewBill = () => {
                     min={0}
                     radius="md"
                     prefix="₹"
+                    disabled
+                    value={price * qty}
                     label="Total Amount"
                     w="100%"
-                    key={form.key(`items.${index}.total`)}
-                    {...form.getInputProps(`items.${index}.total`)}
                   />
                 </NativeFlex>
               </NativeFieldset>
@@ -111,27 +103,22 @@ export const ReviewBill = () => {
       </div>
 
       <NativeGroup>
-  <NativeFlex w="100%" justify="space-between">
-    <Text fz="xl">Discount:</Text>
-    <Text fz="xl">{data?.gemini_analysis?.total_discounts ?? 0}</Text>
-  </NativeFlex>
-  <NativeFlex w="100%" justify="space-between">
-    <Text fz="xl">Taxes:</Text>
-    <Text fz="xl">{data?.gemini_analysis?.total_taxes ?? 0}</Text>
-  </NativeFlex>
-  <NativeFlex w="100%" justify="space-between">
-    <Text fz="xl">Total:</Text>
-    <Text fz="xl">
-      {data?.gemini_analysis?.line_items.reduce(
-        (acc: any, item: { amount: any; }) => acc + item.amount,
-        0
-      ) + (data?.gemini_analysis?.total_discounts ?? 0) + (data?.gemini_analysis?.total_taxes ?? 0)}
-    </Text>
-  </NativeFlex>
-  <Button fullWidth size="lg" onClick={handleSubmit}>
-    Next (3/5)
-  </Button>
-</NativeGroup>
+        <NativeFlex w="100%" justify="space-between">
+          <Text fz="xl">Discount:</Text>
+          <Text fz="xl">{state.discount}</Text>
+        </NativeFlex>
+        <NativeFlex w="100%" justify="space-between">
+          <Text fz="xl">Taxes:</Text>
+          <Text fz="xl">{state.taxes}</Text>
+        </NativeFlex>
+        <NativeFlex w="100%" justify="space-between">
+          <Text fz="xl">Total:</Text>
+          <Text fz="xl">{getTotal()}</Text>
+        </NativeFlex>
+        <Button fullWidth size="lg" onClick={handleSubmit}>
+          Next (3/5)
+        </Button>
+      </NativeGroup>
     </div>
-  );
-};
+  )
+}

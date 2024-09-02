@@ -4,6 +4,7 @@ import { useForm } from '@mantine/form'
 import { IconPlus } from '@/components/icons'
 import { Button, DateInput, IconButton, Pill, Text, TextInput } from '@/components/ui/core'
 import { ROUTES } from '@/constants'
+import { useStore } from '@/hooks'
 import { dateFormat, getHotkeyHandler, NativeGroup, NativeScrollArea, useLocation } from '@/libs'
 
 const initialValues: {
@@ -16,6 +17,9 @@ export const AddExpense = () => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [, setLocation] = useLocation()
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateForm = useStore((state: any) => state.updateForm)
+
   const form = useForm({
     mode: 'uncontrolled',
 
@@ -26,9 +30,17 @@ export const AddExpense = () => {
     },
   })
 
-  const handleSubmit = useCallback(() => {
-    if (!form.validate().hasErrors) setLocation(ROUTES.UPLOAD_BILL)
-  }, [form])
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+  const handleSubmit = () => {
+    if (!form.validate().hasErrors) {
+      const { date, location, participants } = form.getValues()
+
+      updateForm({ date, venue: location, participants })
+
+      setLocation(ROUTES.UPLOAD_BILL)
+    }
+  }
 
   const addParticipant = useCallback(() => {
     const val = inputRef?.current?.value
@@ -61,7 +73,7 @@ export const AddExpense = () => {
           Add new Expense
         </Text>
 
-        <form className="space-y-6" onSubmit={form.onSubmit((values) => console.log(values))}>
+        <form className="space-y-6">
           <TextInput
             size="md"
             radius="md"

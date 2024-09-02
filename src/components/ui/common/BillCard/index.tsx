@@ -1,5 +1,4 @@
-import { IconTrash } from '@tabler/icons-react'
-
+import { IconTrash } from '@/components/icons'
 import { IconButton, Text } from '@/components/ui/core'
 import { dateFormat, NativeCard, NativeFlex } from '@/libs'
 import { BillCardType } from '@/types'

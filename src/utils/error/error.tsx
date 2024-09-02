@@ -5,7 +5,7 @@ type NotificationParams = { title?: string; message: string; icon?: React.ReactN
 type ConsoleParams = unknown
 
 function notificationError(params: NotificationParams) {
-  notification.show({ ...params, color: 'red' })
+  notification.show({ ...params })
 }
 
 function consoleError(params?: ConsoleParams) {

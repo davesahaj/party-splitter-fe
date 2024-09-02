@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useForm } from '@mantine/form'
 
-import { Button, Text } from '@/components/ui/core'
+import { PageLayout } from '@/components/layout'
+import { Text } from '@/components/ui/core'
 import { ROUTES } from '@/constants'
 import { useStore } from '@/hooks'
-import { NativeGroup, NativeMultiSelect, NativeScrollArea, useLocation, useViewportSize } from '@/libs'
+import { NativeGroup, NativeMultiSelect, NativeScrollArea, useLocation } from '@/libs'
 import { BillItem } from '@/types'
 
 export const AddParticipants = () => {
@@ -12,7 +13,6 @@ export const AddParticipants = () => {
   const updateForm = useStore((state: any) => state.updateForm)
 
   const [, setLocation] = useLocation()
-  const { height } = useViewportSize()
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -31,13 +31,13 @@ export const AddParticipants = () => {
   }
 
   return (
-    <div className="flex flex-col justify-between h-full space-y-6">
+    <PageLayout buttonProps={{ onClick: handleSubmit, text: 'Next (4/5)' }}>
       <div className="flex flex-col space-y-10 ">
-        <Text fw={500} c="dark.4" classNames={{ root: 'text-xl text-center' }}>
+        <Text fw={500} c="dark.4" classNames={{ root: 'text-xl text-center font-urbanist' }}>
           Add Participants
         </Text>
-        <NativeScrollArea.Autosize offsetScrollbars mah={height - 350} type="auto">
-          <NativeGroup>
+        <NativeScrollArea.Autosize offsetScrollbars type="auto">
+          <NativeGroup gap="xl">
             {form.getValues().items.map(({ name }: BillItem, idx: number) => (
               <NativeMultiSelect
                 onChange={(val) => handleOnChange(val, idx)}
@@ -51,9 +51,6 @@ export const AddParticipants = () => {
           </NativeGroup>
         </NativeScrollArea.Autosize>
       </div>
-      <Button onClick={handleSubmit} fullWidth size="lg">
-        Next (4/5)
-      </Button>
-    </div>
+    </PageLayout>
   )
 }

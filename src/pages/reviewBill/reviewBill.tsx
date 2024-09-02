@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback } from 'react'
 import { useForm } from '@mantine/form'
+import { isEqual } from 'lodash'
 
-import { Button, NumberInput, Text, TextInput } from '@/components/ui/core'
+import { PageLayout } from '@/components/layout'
+import { NumberInput, Text, TextInput } from '@/components/ui/core'
 import { ROUTES } from '@/constants'
 import { useStore } from '@/hooks'
 import { NativeFieldset, NativeFlex, NativeGroup, NativeScrollArea, useLocation } from '@/libs'
@@ -22,6 +24,11 @@ export const ReviewBill = () => {
       total: state.total,
       discount: state.discount,
     },
+    onValuesChange: (values, previous) => {
+      if (isEqual(values, previous)) return
+
+      form.setFieldValue('total', getTotal())
+    },
   })
 
   const handleSubmit = useCallback(() => {
@@ -38,7 +45,7 @@ export const ReviewBill = () => {
     form.getValues().items.reduce((acc: number, { price, qty }: BillItem) => acc + price * qty, 0)
 
   return (
-    <div className="flex flex-col justify-between h-full space-y-6">
+    <PageLayout buttonProps={{ text: 'Next (3/5)', onClick: handleSubmit }}>
       <div className="flex flex-col space-y-10">
         <Text fw={500} c="dark.4" classNames={{ root: 'text-xl text-center font-urbanist' }}>
           Review Bill details
@@ -56,7 +63,7 @@ export const ReviewBill = () => {
                     label="Name"
                     placeholder="quattro formaggi"
                     key={form.key(`items.${index}.name`)}
-                    {...form.getInputProps(`items.${index}.name`)}
+                    defaultValue={form.getInputProps(`items.${index}.name`).defaultValue}
                   />
                 </NativeFlex>
 
@@ -98,27 +105,24 @@ export const ReviewBill = () => {
                 </NativeFlex>
               </NativeFieldset>
             ))}
+
+            <NativeGroup>
+              <NativeFlex w="100%" justify="space-between">
+                <Text fz="xl">Discount:</Text>
+                <Text fz="xl">{state.discount}</Text>
+              </NativeFlex>
+              <NativeFlex w="100%" justify="space-between">
+                <Text fz="xl">Taxes:</Text>
+                <Text fz="xl">{state.taxes}</Text>
+              </NativeFlex>
+              <NativeFlex w="100%" justify="space-between">
+                <Text fz="xl">Total:</Text>
+                <Text fz="xl">{getTotal()}</Text>
+              </NativeFlex>
+            </NativeGroup>
           </form>
         </NativeScrollArea.Autosize>
       </div>
-
-      <NativeGroup>
-        <NativeFlex w="100%" justify="space-between">
-          <Text fz="xl">Discount:</Text>
-          <Text fz="xl">{state.discount}</Text>
-        </NativeFlex>
-        <NativeFlex w="100%" justify="space-between">
-          <Text fz="xl">Taxes:</Text>
-          <Text fz="xl">{state.taxes}</Text>
-        </NativeFlex>
-        <NativeFlex w="100%" justify="space-between">
-          <Text fz="xl">Total:</Text>
-          <Text fz="xl">{getTotal()}</Text>
-        </NativeFlex>
-        <Button fullWidth size="lg" onClick={handleSubmit}>
-          Next (3/5)
-        </Button>
-      </NativeGroup>
-    </div>
+    </PageLayout>
   )
 }

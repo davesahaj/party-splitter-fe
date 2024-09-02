@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo } from 'react'
 
-import { Button, Text } from '@/components/ui/core'
+import { PageLayout } from '@/components/layout'
+import { Text } from '@/components/ui/core'
 import { ROUTES } from '@/constants'
 import { useStore } from '@/hooks'
 import { NativeFlex, NativeGroup, NativeScrollArea, useLocation, useViewportSize } from '@/libs'
@@ -43,25 +44,26 @@ export const Report = () => {
   }, [state])
 
   return (
-    <div className="flex flex-col justify-between h-full space-y-6">
+    <PageLayout buttonProps={{ onClick: handleSubmit, text: 'Save Report' }}>
       <div className="flex flex-col space-y-10 ">
-        <Text fw={500} c="dark.4" classNames={{ root: 'text-xl text-center' }}>
+        <Text fw={500} c="dark.4" classNames={{ root: 'text-xl text-center font-urbanist' }}>
           Split Report
         </Text>
         <NativeScrollArea.Autosize offsetScrollbars mah={height - 350} type="auto">
           <NativeGroup>
             {participants.map(({ consumer, totalCost }) => (
               <NativeFlex key={consumer} justify="space-between" w="100%">
-                <Text fz="lg">{consumer}</Text>
-                <Text fz="lg">₹{+totalCost.toPrecision(5)}</Text>
+                <Text className="capitalize " fw={600} c="violet.7" fz="lg">
+                  {consumer}
+                </Text>
+                <Text className="font-urbanist" fw={500} fz="lg">
+                  ₹{+totalCost.toPrecision(5)}
+                </Text>
               </NativeFlex>
             ))}
           </NativeGroup>
         </NativeScrollArea.Autosize>
       </div>
-      <Button onClick={handleSubmit} fullWidth size="lg">
-        Save Report
-      </Button>
-    </div>
+    </PageLayout>
   )
 }

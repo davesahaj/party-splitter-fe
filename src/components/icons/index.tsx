@@ -1,4 +1,5 @@
 import {
+  IconCalendarEvent,
   IconCheck,
   IconEdit,
   IconFile,
@@ -6,20 +7,21 @@ import {
   IconMoodSad,
   IconPlugConnectedX,
   IconPlus,
-  IconUsers,
   IconToolsKitchen2,
-  IconCalendarEvent,
+  IconTrash,
+  IconUsers,
 } from '@tabler/icons-react'
 
 export {
-  IconCheck,
   IconCalendarEvent,
+  IconCheck,
   IconEdit,
   IconFile,
   IconMapPin,
-  IconUsers,
   IconMoodSad,
   IconPlugConnectedX,
   IconPlus,
   IconToolsKitchen2,
+  IconTrash,
+  IconUsers,
 }

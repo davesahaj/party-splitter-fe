@@ -1,7 +1,7 @@
 import { IconFile, IconMoodSad, IconPlugConnectedX } from '@/components/icons'
 import { notification } from '@/services'
 
-type NotificationParams = { title: string; message: string; icon?: React.ReactNode }
+type NotificationParams = { title?: string; message: string; icon?: React.ReactNode }
 type ConsoleParams = unknown
 
 function notificationError(params: NotificationParams) {

@@ -6,6 +6,8 @@
 import {
   ActionIcon as NativeActionIcon,
   ActionIconProps as NativeActionIconProps,
+  Alert as NativeAlert,
+  AlertProps as NativeAlertProps,
   Button as NativeButton,
   ButtonProps as NativeButtonProps,
   Card as NativeCard,
@@ -42,6 +44,7 @@ export {
   IMAGE_MIME_TYPE,
   Link,
   NativeActionIcon,
+  NativeAlert,
   NativeButton,
   NativeCard,
   NativeDateInput,
@@ -64,6 +67,7 @@ export {
 
 export type {
   NativeActionIconProps,
+  NativeAlertProps,
   NativeButtonProps,
   NativeCardProps,
   NativeDateInputProps,

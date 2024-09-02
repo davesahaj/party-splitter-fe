@@ -1,3 +1,11 @@
-import { IconEdit, IconPlus } from '@tabler/icons-react'
+import {
+  IconCheck,
+  IconEdit,
+  IconFile,
+  IconMoodSad,
+  IconPlugConnectedX,
+  IconPlus,
+  IconToolsKitchen2,
+} from '@tabler/icons-react'
 
-export { IconEdit, IconPlus }
+export { IconCheck, IconEdit, IconFile, IconMoodSad, IconPlugConnectedX, IconPlus, IconToolsKitchen2 }

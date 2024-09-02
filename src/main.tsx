@@ -1,12 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
-import App from './app'
+import { NotificationProvider, RouterProvider, ThemeProvider } from '@/providers'
 
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider>
+      <NotificationProvider />
+      <RouterProvider />
+    </ThemeProvider>
   </React.StrictMode>,
 )

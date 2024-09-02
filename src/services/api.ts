@@ -1,12 +1,14 @@
-import { storageReader, storageWriter } from '@/utils'
+/* eslint-disable @/no-unused-vars */
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+import { notification } from '@/services'
+
+const API_URL = import.meta.env.VITE_BE_URL
 
 type ApiServiceTypes = {
   url: string
-  type?: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  replace?: boolean
   data?: unknown
-  token?: 'register' | 'auth' // TODO: CHANGE THIS LATER
   file?: File | null
 }
 
@@ -14,16 +16,6 @@ type BodyType = FormData | string
 type HeaderType = {
   'Content-Type'?: string
   Authorization?: string
-}
-
-const tokenMap = {
-  auth: 'token', // !for AWS?
-}
-
-function throwError(error: Error) {
-  console.error('Error occurred:', error)
-
-  return { success: false, message: 'Something went wrong' }
 }
 
 function appendDataToForm(formData: FormData, data: never) {
@@ -38,48 +30,31 @@ async function makeRequest(url: string, options: RequestInit) {
 
     const contentType = response.headers.get('content-type')
 
-    if (response.status === 401) {
-      storageWriter('cookie', { key: 'token', value: null })
-      window.location.href = '/auth'
-    }
-
     if (contentType && contentType.includes('application/json')) {
       return response.json()
     } else {
       return response
     }
   } catch (error) {
-    return throwError(error as Error)
+    console.error('Error occurred:', error)
+    notification.show({ title: 'Error', message: 'Network Error' })
+    return null
   }
 }
 
 async function get(this: ApiServiceTypes) {
-  const url = API_URL + this.url
-
   const headers: HeaderType = {}
-
-  if (this.token) {
-    const token = storageReader('cookie', tokenMap[this.token])
-    headers.Authorization = `Bearer ${token}`
-  }
 
   const options: RequestInit = { method: 'GET', headers }
 
-  return makeRequest(url, options)
+  return makeRequest(this.url, options)
 }
 
 async function post(this: ApiServiceTypes) {
-  const url = API_URL + this.url
-
   let body: BodyType = JSON.stringify(this.data)
 
   const headers: HeaderType = {
     'Content-Type': 'application/json',
-  }
-
-  if (this.token) {
-    const token = storageReader('cookie', tokenMap[this.token])
-    headers.Authorization = `Bearer ${token}`
   }
 
   if (this.file) {
@@ -97,55 +72,51 @@ async function post(this: ApiServiceTypes) {
     headers,
   }
 
-  return makeRequest(url, options)
+  return makeRequest(this.url, options)
 }
 
 async function put(this: ApiServiceTypes) {
-  const url = API_URL + this.url
-  const options: RequestInit = {
-    method: 'PUT',
-    body: JSON.stringify(this.data),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+  const body: BodyType | File = this.file || JSON.stringify(this.data)
+
+  const headers: HeaderType = {
+    'Content-Type': this.file ? this.file.type : 'application/json',
   }
 
-  return makeRequest(url, options)
+  const options: RequestInit = {
+    method: 'PUT',
+    body,
+    headers,
+  }
+
+  return makeRequest(this.url, options)
 }
 
 async function del(this: ApiServiceTypes) {
-  const url = API_URL + this.url
-
   const headers: HeaderType = {}
-
-  if (this.token) {
-    const token = storageReader('cookie', tokenMap[this.token])
-    if (token) {
-      headers.Authorization = `Bearer ${token}`
-    }
-  }
 
   const options: RequestInit = { method: 'DELETE', headers }
 
-  return makeRequest(url, options)
+  return makeRequest(this.url, options)
 }
 
-async function apiService({ type = 'GET', url, data, token, file }: ApiServiceTypes) {
-  switch (type) {
+async function apiService({ method = 'GET', url, data, file, replace = false }: ApiServiceTypes) {
+  const endpoint = replace ? url : API_URL + url
+
+  switch (method) {
     case 'GET':
-      return await get.call({ token, url })
+      return await get.call({ url: endpoint })
 
     case 'POST':
-      return await post.call({ token, url, data, file })
+      return await post.call({ url: endpoint, data, file })
 
     case 'PUT':
-      return await put.call({ token, url, data })
+      return await put.call({ url: endpoint, data, file })
 
     case 'DELETE':
-      return await del.call({ token, url })
+      return await del.call({ url: endpoint })
 
     default:
-      throw new Error(`Unsupported request type: ${type}`)
+      throw new Error(`Unsupported request type: ${method}`)
   }
 }
 

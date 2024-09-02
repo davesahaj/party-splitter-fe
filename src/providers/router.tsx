@@ -2,6 +2,8 @@ import { publicRoutes } from '@/config'
 import { ROUTES } from '@/constants'
 import { Redirect, Route, Switch } from '@/libs'
 
+/*----------  Creates routes defined in config and renders pages  ----------*/
+
 const RouterProvider = () => {
   return (
     <Switch>

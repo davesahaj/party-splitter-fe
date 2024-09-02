@@ -31,7 +31,10 @@ import {
   TextInputProps as NativeTextInputProps,
   TextProps as NativeTextProps,
 } from '@mantine/core'
-import { DateInput as NativeDateInput, DateInputProps as NativeDateInputProps } from '@mantine/dates'
+import {
+  DatePickerInput as NativeDatePickerInput,
+  DatePickerInputProps as NativeDatePickerInputProps,
+} from '@mantine/dates'
 import { Dropzone as NativeDropzone, DropzoneProps as NativeDropzoneProps, IMAGE_MIME_TYPE } from '@mantine/dropzone'
 import {
   Notifications as NativeNotifications,
@@ -47,7 +50,7 @@ export {
   NativeAlert,
   NativeButton,
   NativeCard,
-  NativeDateInput,
+  NativeDatePickerInput,
   NativeDropzone,
   NativeFieldset,
   NativeFlex,
@@ -70,7 +73,7 @@ export type {
   NativeAlertProps,
   NativeButtonProps,
   NativeCardProps,
-  NativeDateInputProps,
+  NativeDatePickerInputProps,
   NativeDropzoneProps,
   NativeFieldsetProps,
   NativeFlexProps,

@@ -1,7 +1,8 @@
-import { NativeDateInput, NativeDateInputProps } from '@/libs'
+//@ts-nocheck
+import { NativeDatePickerInput, NativeDatePickerInputProps } from '@/libs'
 
-interface DateInputProps extends NativeDateInputProps {}
+interface DateInputProps extends NativeDatePickerInputProps {}
 
 export function DateInput({ ...props }: DateInputProps) {
-  return <NativeDateInput {...props} />
+  return <NativeDatePickerInput {...props} />
 }

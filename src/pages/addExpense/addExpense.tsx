@@ -28,6 +28,10 @@ export const AddExpense = () => {
     validate: {
       location: (value) => (!value.length ? 'Location can not be empty' : null),
       date: (value: Date | null) => (value instanceof Date ? null : 'Date can not be empty'),
+      participants: (values: string[]) => {
+        if (!values || !values.length) return 'Please add at-least one participant'
+        return null
+      },
     },
   })
 
@@ -53,6 +57,7 @@ export const AddExpense = () => {
     })
 
     inputRef.current.value = ''
+    inputRef.current.focus
   }, [form])
 
   const removeParticipant = useCallback(
@@ -73,7 +78,7 @@ export const AddExpense = () => {
         Add new Expense
       </Text>
 
-      <form className="space-y-6">
+      <form className="space-y-6 pb-8">
         <TextInput
           size="md"
           radius="md"
@@ -96,7 +101,7 @@ export const AddExpense = () => {
           key={form.key('date')}
           {...form.getInputProps('date')}
         />
-        <NativeGroup justify="space-between" align="flex-end" wrap="nowrap" gap="sm">
+        <NativeGroup justify="space-between" align="flex-start" wrap="nowrap" gap="sm">
           <TextInput
             ref={inputRef}
             size="md"
@@ -106,9 +111,10 @@ export const AddExpense = () => {
             label="Participants"
             placeholder="Saksham"
             className="lg:w-full"
+            error={form.getInputProps('participants').error}
             onKeyDown={getHotkeyHandler([['Enter', addParticipant]])}
           />
-          <IconButton size="xl" mb={2} radius="xl" variant="light">
+          <IconButton size="xl" mt={22} radius="xl" variant="light">
             <IconPlus onClick={addParticipant} />
           </IconButton>
         </NativeGroup>

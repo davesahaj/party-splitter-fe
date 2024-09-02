@@ -2,10 +2,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { Image } from '@mantine/core'
 import { FileWithPath } from '@mantine/dropzone'
-import { IconLicense, IconUpload } from '@tabler/icons-react'
+import { IconLicense, IconTrash, IconUpload } from '@tabler/icons-react'
 
 import { PageLayout } from '@/components/layout'
-import { Text } from '@/components/ui/core'
+import { IconButton, Text } from '@/components/ui/core'
 import { ROUTES } from '@/constants'
 import { useStore } from '@/hooks'
 import { IMAGE_MIME_TYPE, NativeDropzone, NativeFlex, useLocation } from '@/libs'
@@ -134,28 +134,40 @@ export const UploadBill = () => {
     setFile(file)
   }
 
+  const deleteFile = () => {
+    setFile(null)
+  }
+
   return (
     <PageLayout buttonProps={{ onClick: handleSubmit, text: '  Next (2/5)', loading: isLoading }}>
       <div className="flex flex-col space-y-10 ">
         <Text fw={500} c="dark.4" classNames={{ root: 'text-xl text-center font-urbanist' }}>
           Add bill details
         </Text>
-        <NativeDropzone disabled={isLoading} onDrop={(files) => updateFile(files[0])} accept={IMAGE_MIME_TYPE}>
-          <NativeFlex gap="md" h={150} justify="center" align="center" direction="column" wrap="nowrap">
-            <IconUpload />
-            <Text fw={500} c="dark.4" classNames={{ root: 'text-xl' }}>
-              {isLoading ? ' Uploading Bill' : ' Upload Bill'}
-            </Text>
-          </NativeFlex>
-        </NativeDropzone>
         {file ? (
-          <Image
-            className="h-auto w-1/2 mx-auto"
-            src={URL.createObjectURL(file)}
-            onLoad={() => URL.revokeObjectURL(URL.createObjectURL(file))}
-          />
+          <div className="relative w-full animate-fade flex justify-center">
+            <IconButton disabled={isLoading} onClick={deleteFile} variant="white" className="absolute z-50 bottom-4">
+              <IconTrash style={{ width: 16, height: 16 }} />
+            </IconButton>
+            <Image
+              className={`h-auto transition-all duration-500 rounded-xl shadow-2xl w-[45vw] md:w-[30vw] lg:w-[20vw] ${isLoading ? 'brightness-75' : ''}`}
+              src={URL.createObjectURL(file)}
+              onLoad={() => URL.revokeObjectURL(URL.createObjectURL(file))}
+            />
+          </div>
         ) : (
-          <IconLicense size="140px" stroke={0.15} className="mx-auto" />
+          <>
+            {' '}
+            <NativeDropzone disabled={isLoading} onDrop={(files) => updateFile(files[0])} accept={IMAGE_MIME_TYPE}>
+              <NativeFlex gap="md" h={150} justify="center" align="center" direction="column" wrap="nowrap">
+                <IconUpload />
+                <Text fw={500} c="dark.4" classNames={{ root: 'text-xl font-urbanist' }}>
+                  {isLoading ? ' Uploading Bill' : ' Upload Bill'}
+                </Text>
+              </NativeFlex>
+            </NativeDropzone>
+            <IconLicense size="140px" stroke={0.15} className="mx-auto" />
+          </>
         )}
       </div>
     </PageLayout>

@@ -8,6 +8,7 @@ import {
   IconPlugConnectedX,
   IconPlus,
   IconToolsKitchen2,
+  IconTrash,
   IconUsers,
 } from '@tabler/icons-react'
 
@@ -21,5 +22,6 @@ export {
   IconPlugConnectedX,
   IconPlus,
   IconToolsKitchen2,
+  IconTrash,
   IconUsers,
 }

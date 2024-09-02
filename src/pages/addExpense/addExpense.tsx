@@ -27,7 +27,7 @@ export const AddExpense = () => {
     initialValues,
     validate: {
       location: (value) => (!value.length ? 'Location can not be empty' : null),
-      date: (value: Date | string) => (value instanceof Date ? null : 'Date can not be empty'),
+      date: (value: Date | null) => (value instanceof Date ? null : 'Date can not be empty'),
     },
   })
 

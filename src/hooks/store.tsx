@@ -4,29 +4,52 @@ import { storageReader, storageWriter } from '@/utils'
 
 const emptyForm = {
   id: randomId(),
-
   venue: null,
   date: null,
   participants: [],
-
   items: [],
   taxes: null,
   total: null,
   discount: null,
 } as const
 
-export const useStore = createStore((set) => ({
-  ...emptyForm,
-  updateForm: (values: any) => set(() => ({ ...values })),
-  saveAndReset: () =>
+export const useStore = createStore((set) => {
+  const initialState = storageReader('localStorage', 'prevstate') || emptyForm;
+
+  const updateForm = (values: any) => {
     set((state: any) => {
-      // eslint-disable-next-line @/no-unused-vars, @typescript-eslint/no-unused-vars
-      const { updateForm, saveAndReset, ...data } = state
+      const newState = { ...state, ...values };
+      storageWriter('localStorage', { prevstate: newState });
+      return newState;
+    });
+  };
 
-      const reports = storageReader('localStorage', 'reports')
+  const saveAndReset = () => {
+    set((state: any) => {
+      const { updateForm, saveAndReset, ...data } = state;
 
-      if (data.venue) storageWriter('localStorage', { reports: [...(reports ? reports : []), data] })
+      const reports = storageReader('localStorage', 'reports');
 
-      return { ...state, ...emptyForm }
-    }),
-}))
+      if (data.venue) {
+        storageWriter('localStorage', { reports: [...(reports ? reports : []), data] });
+      }
+
+      
+      storageWriter('localStorage', { prevstate: emptyForm });
+
+      return { ...emptyForm };
+    });
+  };
+
+  
+  set(() => {
+    storageWriter('localStorage', { prevstate: initialState });
+    return initialState;
+  });
+
+  return {
+    ...initialState,
+    updateForm,
+    saveAndReset,
+  }
+});
